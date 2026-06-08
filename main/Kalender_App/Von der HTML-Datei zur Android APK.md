@@ -6,8 +6,8 @@ topic: App-Baukasten
 tags:
   - android
   - apk
-  - kalenderapp
   - capacitor
+  - nodejs
 ---
 # 📦 Von der HTML-Datei zur Android APK
 
