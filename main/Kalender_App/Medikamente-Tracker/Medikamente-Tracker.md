@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt
+## 📌 Inhalt definieren
 
 ```
 [ ] 1x Medikament1 (mg) morgens
