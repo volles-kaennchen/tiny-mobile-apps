@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt des Neurodermitis-Protokoll
+## 📌 Inhalt 
 
 ```
 Zustand der Haut
