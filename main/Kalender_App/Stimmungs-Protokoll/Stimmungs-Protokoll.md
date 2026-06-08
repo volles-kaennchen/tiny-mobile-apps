@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt des Stimmungs-Protokoll
+## 📌 Inhalt definieren
 
 ```
 [ ] gut gelaunt         [ ] gereizt
