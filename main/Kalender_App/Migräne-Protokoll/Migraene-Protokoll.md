@@ -12,7 +12,7 @@ tags:
 
 > [!abstract] Einleitung
 > Dieser Baustein dokumentiert die personalisierbaren Inhalte des Migräne-Protokolls.
-> Der vollständige Code liegt in der `index.html` des jeweiligen Ordners.
+> Der vollständige Code liegt in der `index.html` des Ordners.
 
 ---
 
