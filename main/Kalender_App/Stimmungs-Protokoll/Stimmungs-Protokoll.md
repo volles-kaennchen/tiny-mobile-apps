@@ -6,8 +6,6 @@ topic: Baukasten
 tags:
   - JavaScript
   - html
-  - kalenderapp
-  - stimmung
 ---
 
 # 😊 Stimmungs-Protokoll – Personalisierung
