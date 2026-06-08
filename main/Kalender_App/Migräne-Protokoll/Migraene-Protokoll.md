@@ -6,8 +6,6 @@ topic: Baukasten
 tags:
   - JavaScript
   - html
-  - kalenderapp
-  - migraene
 ---
 
 # 🧠 Migräne-Protokoll – Personalisierung
