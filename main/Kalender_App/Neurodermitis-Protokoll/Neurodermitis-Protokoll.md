@@ -6,8 +6,6 @@ topic: Baukasten
 tags:
   - JavaScript
   - html
-  - kalenderapp
-  - neurodermitis
 ---
 
 # 🩹 Neurodermitis-Protokoll – Personalisierung
