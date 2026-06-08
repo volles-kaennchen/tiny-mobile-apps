@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt 
+## 📌 Inhalt definieren
 
 ```
 Zustand der Haut
