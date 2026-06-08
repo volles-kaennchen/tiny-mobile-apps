@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt des Medikamente-Tracker
+## 📌 Inhalt
 
 ```
 [ ] 1x Medikament1 (mg) morgens
