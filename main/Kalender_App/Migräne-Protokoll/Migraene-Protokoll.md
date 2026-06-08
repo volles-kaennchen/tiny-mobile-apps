@@ -16,8 +16,7 @@ tags:
 
 ---
 
-## 📌 Inhalt Migräne-Protokoll
-
+## 📌 Inhalt definieren
 ```
 Dauer (in Stunden):
 [               ]
