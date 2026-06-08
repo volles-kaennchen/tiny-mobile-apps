@@ -23,7 +23,9 @@ tags: #
 
 ### 🎨 Visuelles Design
 
--Screenshot einfügen-
+
+Hier ist Platz für ein Images des Layouts.
+
 
 ###  💎 Die Code Bausteine vom Kalender
 
