@@ -236,3 +236,39 @@ function exportDataAsFile() {
 ```
 
 ---
+
+## 🛠️ Das Notizfeld 
+
+Manchmal gibt es ein bestimmtes Thema oder ein gesundheitliches Ereignis was noch nicht im Kalender zur Verfügung steht.
+
+### 📌 Inhalt
+```
+Hast du noch was auf dem Herzen?
+[Hier ist Platz für weitere Notizen und Symptome.]
+```
+
+###  🎨 Visuelle Ansicht 
+
+
+Hier ist Platz für ein Images des Layouts.
+
+
+
+#### HTML 
+```html
+<div class="form-group">
+    <label for="notes">Hast du noch was auf dem Herzen?</label>
+    <textarea id="notes" placeholder="Hier ist Platz für weitere Notizen und Symptome."></textarea>
+</div>
+```
+
+#### JavaScript
+```js
+// Daten laden (in selectDay)
+document.getElementById("notes").value = data.notizen || "";
+
+// Daten speichern (in saveData / appData-Objekt)
+notizen: document.getElementById("notes").value
+```
+
+
