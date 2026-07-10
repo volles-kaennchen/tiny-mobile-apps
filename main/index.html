@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pflanzen-Kalender</title>
+
+    <script src="capacitor.js"></script>
+    <style>
+        :root {
+            --primary-color: #217721;
+            --primary-light: #eef2f7;
+            --accent-color: #217721;
+            --text-color: #333333;
+            --border-color: #cccccc;
+            --bg-color: #f7f9fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Georgia;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 380px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .calendar-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .nav-btn {
+            background: var(--primary-light);
+            border: none;
+            color: var(--primary-color);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .grid-table {
+            background-color: #21772125;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            color: #888;
+            font-weight: 600;
+            padding: 6px 0;
+            font-size: 0.85rem;
+        }
+
+        td {
+            text-align: center;
+            padding: 9px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        td:hover:not(.empty) {
+            background-color: var(--primary-light);
+        }
+
+        td.empty {
+            cursor: default;
+        }
+
+        .today {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: bold;
+            border: 2px solid var(--primary-color);
+        }
+
+        .selected-day {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        .has-data::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+        }
+
+       
+        #selected-date-title {
+            text-align: left;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .grid-table th {
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .grid-table td {
+            cursor: default;
+            padding: 8px 4px;
+        }
+
+        .grid-table td.row-label {
+            text-align: left;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.85rem;
+            cursor: default;
+        }
+
+        .grid-table tr.group-divider td {
+            border-top: 1px solid rgba(33, 119, 33, 0.3);
+            padding-top: 12px;
+        }
+
+        .grid-checkbox {
+            width: 22px;
+            height: 22px;
+            accent-color: #555;
+            cursor: pointer;
+        }
+
+        .btn-block {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-block:hover {
+            background-color: #555;
+        }
+
+        .btn-block:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .exit-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-exit {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-exit:hover {
+            background-color: #555;
+        }
+
+        .btn-reset {
+            background-color: #b3452f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: #b3452f;
+        }
+
+        .btn-reset:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .hint-text {
+            color: #999;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+  
+    <div class="container">
+        <h2>🌿Mein Pflanzen Kalender🌿</h2>
+        <div class="calendar-header">
+            <button class="nav-btn" onclick="changeMonth(-1)">&lt;</button>
+            <h3 id="calendar-month-year"></h3>
+            <button class="nav-btn" onclick="changeMonth(1)">&gt;</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+
+  
+    <div class="container">
+        <h3 id="selected-date-title">☀️ Eintrag für: Bitte Tag auswählen</h3>
+
+        <table class="grid-table">
+            <thead>
+                <tr id="grid-header-row">
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="grid-body">
+            </tbody>
+        </table>
+
+        <button type="button" class="btn-block" id="save-btn" onclick="saveData()" disabled>Eintrag speichern</button>
+
+        <div class="exit-row">
+            <button type="button" class="btn-reset" id="reset-btn" onclick="resetSelectedDay()" disabled>Eintrag zurücksetzen</button>
+            <button type="button" class="btn-exit" onclick="exitApp()">App beenden</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = "mein_pflanzen_kalender_daten";
+
+
+        const ROW_LABELS = [
+        "Sanseveria Black Coral", "Pothos Marble Queen", "Yucca", "Musa velutina",
+        "Dieffenbachia Tropic Snow", "Ginseng Ficus", "Hass Avocado", "Palme",
+        "Dieffenbachia Camilla", "Fuerte Avocado", "Alokasie Pfeilblatt", "Musa velutina", 
+        "Sanseveria Black Coral", "Ficus microcarpa", "Crassula ovata Geldbaum", "Musa velutina"];
+
+        const GROUP_DIVIDER_INDICES = [4, 8, 12];
+
+        const COLUMN_LABELS = ["Gießen 💦", "Umtopfen 🌱"];
+
+        let currentDate = new Date();
+        let selectedDateStr = "";
+
+        const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+        let appStore = loadStore();
+
+        function loadStore() {
+            const raw = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            const thisYear = new Date().getFullYear();
+
+            if (!raw || raw.year !== thisYear) {
+                const freshStore = { year: thisYear, entries: {} };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(freshStore));
+                return freshStore;
+            }
+            return raw;
+        }
+
+        function persistStore() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appStore));
+        }
+
+        
+        function buildGridTable() {
+            const headerRow = document.getElementById("grid-header-row");
+            COLUMN_LABELS.forEach(label => {
+                const th = document.createElement("th");
+                th.innerText = label;
+                headerRow.appendChild(th);
+            });
+
+            const gridBody = document.getElementById("grid-body");
+
+            ROW_LABELS.forEach((rowLabel, rowIndex) => {
+                const tr = document.createElement("tr");
+
+                
+                if (GROUP_DIVIDER_INDICES.includes(rowIndex)) {
+                    tr.classList.add("group-divider");
+                }
+
+                const labelCell = document.createElement("td");
+                labelCell.classList.add("row-label");
+                labelCell.innerText = rowLabel;
+                tr.appendChild(labelCell);
+
+                COLUMN_LABELS.forEach((colLabel, colIndex) => {
+                    const cell = document.createElement("td");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.classList.add("grid-checkbox");
+                    checkbox.dataset.row = rowIndex;
+                    checkbox.dataset.col = colIndex;
+                    cell.appendChild(checkbox);
+                    tr.appendChild(cell);
+                });
+
+                gridBody.appendChild(tr);
+            });
+        }
+
+        function getGridCheckboxes() {
+            return Array.from(document.querySelectorAll(".grid-checkbox"));
+        }
+
+        function resetGrid() {
+            getGridCheckboxes().forEach(cb => cb.checked = false);
+        }
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById("calendar-month-year").innerText = `${monthNames[month]} ${year}`;
+
+            let firstDayIndex = new Date(year, month, 1).getDay();
+            firstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const calendarBody = document.getElementById("calendar-body");
+            calendarBody.innerHTML = "";
+
+            let dateCounter = 1;
+            const today = new Date();
+
+            for (let i = 0; i < 6; i++) {
+                let row = document.createElement("tr");
+                let addedCells = false;
+
+                for (let j = 0; j < 7; j++) {
+                    let cell = document.createElement("td");
+
+                    if (i === 0 && j < firstDayIndex) {
+                        cell.classList.add("empty");
+                    } else if (dateCounter > daysInMonth) {
+                        if (j > 0 && j < 7) {
+                            cell.classList.add("empty");
+                            row.appendChild(cell);
+                        }
+                        break;
+                    } else {
+                        cell.innerText = dateCounter;
+                        addedCells = true;
+
+                        const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateCounter).padStart(2, '0')}`;
+                        cell.dataset.date = dayString;
+
+                        if (dateCounter === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                            cell.classList.add("today");
+                        }
+
+                        if (dayString === selectedDateStr) {
+                            cell.classList.add("selected-day");
+                        }
+
+                        if (appStore.entries[dayString]) {
+                            cell.classList.add("has-data");
+                        }
+
+                        cell.onclick = function () {
+                            selectDay(this.dataset.date);
+                        };
+
+                        dateCounter++;
+                    }
+                    row.appendChild(cell);
+                }
+                if (addedCells) {
+                    calendarBody.appendChild(row);
+                }
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        function selectDay(dateStr) {
+
+            appStore = loadStore();
+
+            selectedDateStr = dateStr;
+            generateCalendar();
+
+            const [y, m, d] = dateStr.split("-");
+            document.getElementById("selected-date-title").innerText = `☀️ Eintrag für: ${d}.${m}.${y}`;
+            document.getElementById("save-btn").disabled = false;
+            document.getElementById("reset-btn").disabled = false; 
+            
+
+            resetGrid();
+
+            const savedEntry = appStore.entries[dateStr];
+            if (savedEntry && Array.isArray(savedEntry.grid)) {
+                getGridCheckboxes().forEach(cb => {
+                    const r = Number(cb.dataset.row);
+                    const c = Number(cb.dataset.col);
+                    cb.checked = !!(savedEntry.grid[r] && savedEntry.grid[r][c]);
+                });
+            }
+        }
+
+        function saveData() {
+            if (!selectedDateStr) {
+                alert("Bitte wähle zuerst einen Tag im Kalender aus!");
+                return;
+            }
+
+            const grid = ROW_LABELS.map(() => COLUMN_LABELS.map(() => false));
+            getGridCheckboxes().forEach(cb => {
+                const r = Number(cb.dataset.row);
+                const c = Number(cb.dataset.col);
+                grid[r][c] = cb.checked;
+            });
+
+            appStore.entries[selectedDateStr] = { grid: grid };
+
+            persistStore();
+
+            alert("Eintrag gespeichert!");
+            generateCalendar();
+        }
+
+        function resetSelectedDay() {
+            if (!selectedDateStr) {
+                alert("Bitte wähle zuerst einen Tag im Kalender aus!");
+                return;
+            }
+
+            const bestaetigt = confirm(`Eintrag für ${selectedDateStr.split("-").reverse().join(".")} wirklich löschen?`);
+            if (!bestaetigt) {
+                return;
+            }
+
+            delete appStore.entries[selectedDateStr];
+            persistStore();
+
+            resetGrid();
+            generateCalendar();
+
+            alert("Der ausgewählte Eintrag wurde gelöscht.");
+        }
+
+        function exitApp() {
+        try {
+            if (typeof window.Capacitor !== 'undefined') {
+                if (window.Capacitor.Plugins) {
+                    const AppPlugin = window.Capacitor.Plugins.App;
+                    if (AppPlugin && typeof AppPlugin.exitApp === 'function') {
+                        AppPlugin.exitApp();
+                        return;
+                    } else {
+                        alert("Fehler: Das 'App'-Plugin fehlt in den Capacitor-Plugins.");
+                    }
+                } else {
+                    alert("Fehler: window.Capacitor existiert, aber .Plugins ist leer.");
+                }
+                
+            } else {
+                alert("Hinweis: Capacitor ist nicht geladen (Browser-Modus).");
+            }
+        } catch (error) {
+            alert("Kritischer JavaScript Fehler: " + error.message);
+        }
+
+        try {
+            window.close();
+        } catch(e) {}
+    }
+
+        window.onload = function () {
+            buildGridTable();
+            generateCalendar();
+        };
+    </script>
+</body>
+</html>
